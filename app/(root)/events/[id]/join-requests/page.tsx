@@ -69,14 +69,14 @@ const JoinRequestsPage = async ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <Suspense
-      fallback={
-        <main className="w-full wrapper min-h-[80vh] fl_center">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        </main>
-      }
-    >
-      <main className="wrapper">
+    <main className="wrapper">
+      <Suspense
+        fallback={
+          <div className="w-full wrapper min-h-[80vh] fl_center">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        }
+      >
         <h1 className="h_xl text-primary my-8">{event.event_name}</h1>
         <section className="min-h-[50vh]">
           <h2 className="h_md my-4">Join requests</h2>
@@ -116,8 +116,8 @@ const JoinRequestsPage = async ({ params }: { params: { id: string } }) => {
             <p className="text-muted-foreground">No join requests</p>
           )}
         </section>
-      </main>
-    </Suspense>
+      </Suspense>
+    </main>
   );
 };
 
