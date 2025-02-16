@@ -1,7 +1,8 @@
 import SocialSignInUp from "@/components/shared/SocialSignInUp";
 
 const SignUpPage = () => {
-  return <SocialSignInUp login={false} />;
+  const development = process.env.DEPLOYMENT_MODE === "DEV";
+  return <SocialSignInUp login={false} isDev={development} />;
 };
 
 export default SignUpPage;
