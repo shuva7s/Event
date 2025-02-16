@@ -3,8 +3,10 @@ import RemoveUser from "@/components/shared/RemoveUser";
 import { Badge } from "@/components/ui/badge";
 import { auth } from "@/lib/auth";
 import { neon } from "@neondatabase/serverless";
+import { Loader2 } from "lucide-react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 const MembersPage = async ({ params }: { params: { id: string } }) => {
   if (!params.id || params.id.length !== 36) {
@@ -61,63 +63,71 @@ const MembersPage = async ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <main className="wrapper p_lg">
-      <h1 className="h_xl text-primary my-8">{event.event_name}</h1>
-      <section className="min-h-[50vh]">
-        <h2 className="h_md my-4">Members</h2>
-        <hr className="rounded-full my-4" />
-        {event.members_with_membership_type ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {event.members_with_membership_type.map((request: any) => (
-              <div
-                className="p-5 flex flex-col gap-5 rounded-xl border hover:shadow-md transition-all dark:hover:bg-accent/50"
-                key={request.id}
-              >
-                <div className="flex flex-wrap flex-row gap-3">
-                  <Dp
-                    className="w-12 h-12"
-                    expandable
-                    src={request.image}
-                    name={request.name}
-                  />
-                  <div>
-                    <h2>{request.name}</h2>
-                    <p className="text-sm text-muted-foreground">
-                      {request.email}
-                    </p>
+    <Suspense
+      fallback={
+        <main className="w-full wrapper min-h-[80vh] fl_center">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </main>
+      }
+    >
+      <main className="wrapper p_lg">
+        <h1 className="h_xl text-primary my-8">{event.event_name}</h1>
+        <section className="min-h-[50vh]">
+          <h2 className="h_md my-4">Members</h2>
+          <hr className="rounded-full my-4" />
+          {event.members_with_membership_type ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {event.members_with_membership_type.map((request: any) => (
+                <div
+                  className="p-5 flex flex-col gap-5 rounded-xl border hover:shadow-md transition-all dark:hover:bg-accent/50"
+                  key={request.id}
+                >
+                  <div className="flex flex-wrap flex-row gap-3">
+                    <Dp
+                      className="w-12 h-12"
+                      expandable
+                      src={request.image}
+                      name={request.name}
+                    />
+                    <div>
+                      <h2>{request.name}</h2>
+                      <p className="text-sm text-muted-foreground">
+                        {request.email}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-row gap-1.5 flex-wrap justify-end items-center">
+                    <Badge
+                      variant={
+                        request.role === "host" || request.role === "admin"
+                          ? "default"
+                          : "secondary"
+                      }
+                      className="py-2.5"
+                    >
+                      {request.role === "host" && "Host"}
+                      {request.role === "admin" && "Admin"}
+                      {request.role === "guest" && "Guest"}
+                    </Badge>
+
+                    {event.membership_type !== "guest" &&
+                      request.role === "guest" && (
+                        <RemoveUser
+                          eventId={event.id}
+                          targetUserId={request.id}
+                          targetUserName={request.name}
+                        />
+                      )}
                   </div>
                 </div>
-                <div className="flex flex-row gap-1.5 flex-wrap justify-end items-center">
-                  <Badge
-                    variant={
-                      request.role === "host" || request.role === "admin"
-                        ? "default"
-                        : "secondary"
-                    }
-                    className="py-2.5"
-                  >
-                    {request.role === "host" && "Host"}
-                    {request.role === "admin" && "Admin"}
-                    {request.role === "guest" && "Guest"}
-                  </Badge>
-
-                  {event.membership_type !== "guest" &&
-                    request.role === "guest" && (
-                      <RemoveUser
-                        eventId={event.id}
-                        targetUserId={request.id}
-                        targetUserName={request.name}
-                      />
-                    )}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-muted-foreground">No join requests</p>
-        )}
-      </section>
-    </main>
+              ))}
+            </div>
+          ) : (
+            <p className="text-muted-foreground">No join requests</p>
+          )}
+        </section>
+      </main>
+    </Suspense>
   );
 };
 
