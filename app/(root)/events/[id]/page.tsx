@@ -62,7 +62,7 @@ const EventPage = async ({ params }: { params: { id: string } }) => {
               height={300}
               alt={event.title}
               quality={80}
-              loading="lazy"
+              priority
             />
           ) : (
             <ImageIcon className="w-12 h-12 text-muted-foreground" />

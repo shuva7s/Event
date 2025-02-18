@@ -27,11 +27,12 @@ const EventCard = ({
       <CardContent className="p-0 relative w-full aspect-video fl_center">
         {event.image ? (
           <Image
+            priority
             src={event.image}
             alt={event.title}
             width={200}
             height={200}
-            loading="lazy"
+            quality={80}
             draggable={false}
             className="w-full select-none"
           />
