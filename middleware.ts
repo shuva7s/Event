@@ -43,7 +43,8 @@ export default async function authMiddleware(request: NextRequest) {
 // };
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\.(?:png|svg|jpe?g)$).*)"],
+  // matcher: ["/((?!api|_next/static|_next/image|.*\\.(?:png|svg|jpe?g)$).*)"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|.*\\.(?:png|svg|jpe?g|webp|gif|ico|bmp)$).*)",
+  ],
 };
-
-
