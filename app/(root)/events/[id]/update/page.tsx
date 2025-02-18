@@ -47,8 +47,8 @@ const EditEventPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <main className="wrapper min-h-[85vh]">
-      <h1 className="h_xl mb-4">
-        Edit <span className="text-primary">event</span>
+      <h1 className="h_xl mt-5 mb-10">
+        Update <span className="text-primary">event</span>
       </h1>
       <EventForm
         type="update"
@@ -61,6 +61,8 @@ const EditEventPage = async ({ params }: { params: { id: string } }) => {
         location={event.location}
         startDateTime={new Date(event.start_date_time)}
         endDateTime={new Date(event.end_date_time)}
+        hasStarted={event.has_started}
+        hasEnded={event.has_ended}
         url={event.url}
         />
     </main>

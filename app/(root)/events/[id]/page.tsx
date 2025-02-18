@@ -1,6 +1,8 @@
 import DeleteEvent from "@/components/shared/DeleteEvent";
+import EndEvent from "@/components/shared/EndEvent";
 import Join from "@/components/shared/Join";
 import SendRequest from "@/components/shared/SendRequest";
+import StartEvent from "@/components/shared/StartEvent";
 import TimeRemaining from "@/components/shared/TimeRemaining";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
@@ -48,8 +50,6 @@ const EventPage = async ({ params }: { params: { id: string } }) => {
     redirect("/"); // Redirect if event does not exist
   }
 
-  console.log("event", event);
-
   return (
     <main className="wrapper">
       <section className="grid gap-5 md:gap-10 grid-cols-1 md:grid-cols-2">
@@ -83,25 +83,33 @@ const EventPage = async ({ params }: { params: { id: string } }) => {
               <>
                 {event.host_id === session.user.id ? (
                   <div className="flex flex-row gap-2 flex-wrap justify-end items-center">
-                    {!event.has_started && !event.has_ended && (
-                      <Button variant="success" className="flex-1">
-                        Start event
-                      </Button>
+                    {event.has_started && event.has_ended ? (
+                      <DeleteEvent
+                        eventId={event.id}
+                        hasEnded={event.has_ended}
+                        hasStarted={event.has_started}
+                      />
+                    ) : (
+                      <>
+                        {!event.has_started && !event.has_ended && (
+                          <StartEvent
+                            eventId={event.id}
+                            startDateTime={event.start_date_time}
+                          />
+                        )}
+                        {event.has_started && !event.has_ended && (
+                          <EndEvent eventId={event.id} />
+                        )}
+                        <Button variant="secondary" asChild>
+                          <Link href={`/events/${params.id}/update`}>Edit</Link>
+                        </Button>
+                        <DeleteEvent
+                          eventId={event.id}
+                          hasEnded={event.has_ended}
+                          hasStarted={event.has_started}
+                        />
+                      </>
                     )}
-                    {event.has_started && !event.has_ended && (
-                      <Button variant="destructive" disabled>
-                        End event
-                      </Button>
-                    )}
-
-                    <Button variant="secondary" asChild>
-                      <Link href={`/events/${params.id}/edit`}>Edit</Link>
-                    </Button>
-                    <DeleteEvent
-                      eventId={event.id}
-                      hasEnded={event.has_ended}
-                      hasStarted={event.has_started}
-                    />
                   </div>
                 ) : (
                   <Button variant="destructive">Leave</Button>

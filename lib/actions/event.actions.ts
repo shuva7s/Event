@@ -77,8 +77,8 @@ export async function createEvent({
       ${image || null}, 
       ${isOnline}, 
       ${isPublic},
-      ${startDateTime.toISOString()}, 
-      ${endDateTime.toISOString()},
+      ${startDateTime}, 
+      ${endDateTime},
       ${url},
       NOW(), 
       NOW()
@@ -193,8 +193,8 @@ export async function updateEvent({
           image = ${image || null},
           online = ${isOnline},
           public = ${isPublic},
-          start_date_time = ${startDateTime.toISOString()},
-          end_date_time = ${endDateTime.toISOString()},
+          start_date_time = ${startDateTime},
+          end_date_time = ${endDateTime},
           url = ${url},
           updated_at = NOW()
         WHERE id = ${eventId} AND host_id = ${userId}
@@ -628,6 +628,95 @@ export async function removeUser({
     return {
       success: true,
       message: "User has been removed from the event.",
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: {
+        title: "Unknown error",
+        message: error.message || "Something went wrong",
+      },
+    };
+  }
+}
+
+export async function handleStartEnd({
+  eventId,
+  type,
+}: {
+  eventId: string;
+  type: "start" | "end";
+}) {
+  try {
+    const session = await auth.api.getSession({
+      headers: headers(),
+    });
+
+    if (!session) {
+      return {
+        success: false,
+        error: {
+          title: "You are not signed in",
+          message: "You must be logged in to perform this action.",
+        },
+      };
+    }
+
+    const userId = session.user.id;
+    const sql = neon(process.env.DATABASE_URL!);
+
+    // Check if current user is the event host or an admin
+    const permissionCheck = await sql`
+      SELECT role
+      FROM membership
+      WHERE event_id = ${eventId} AND user_id = ${userId}
+      AND role IN ('admin', 'host');
+    `;
+
+    if (permissionCheck.length === 0) {
+      return {
+        success: false,
+        error: {
+          title: "Permission denied",
+          message: "You must be an admin or host to perform this action.",
+        },
+      };
+    }
+
+    if (type === "start") {
+      // Start event: Set `has_started` to TRUE
+      await sql`
+        UPDATE event
+        SET has_started = TRUE
+        WHERE id = ${eventId} AND has_started = FALSE;
+      `;
+
+      return {
+        success: true,
+        message: "Event has started successfully.",
+      };
+    }
+
+    if (type === "end") {
+      // End event: Set `has_ended` to TRUE
+      await sql`
+        UPDATE event
+        SET has_ended = TRUE
+        WHERE id = ${eventId} AND has_ended = FALSE;
+      `;
+
+      return {
+        success: true,
+        message: "Event has ended successfully.",
+      };
+    }
+
+    return {
+      success: false,
+      error: {
+        title: "Invalid action",
+        message: "The provided action type is not valid.",
+      },
     };
   } catch (error: any) {
     return {

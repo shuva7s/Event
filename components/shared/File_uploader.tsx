@@ -63,7 +63,7 @@ export function File_uploader({
   return (
     <div
       {...getRootProps()}
-      className={`flex border w-full aspect-video justify-center overflow-hidden rounded-xl relative cursor-pointer ${
+      className={`flex border w-full aspect-video justify-center overflow-hidden rounded-xl relative cursor-pointer bg-background ${
         disabled ? "opacity-50 cursor-not-allowed" : ""
       }`}
     >
