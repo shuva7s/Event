@@ -1,8 +1,10 @@
 import EventForm from "@/components/shared/forms/EventForm";
 import { auth } from "@/lib/auth";
 import { neon } from "@neondatabase/serverless";
+import { Loader2 } from "lucide-react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 const EditEventPage = async ({ params }: { params: { id: string } }) => {
   if (!params.id || params.id.length !== 36) {
@@ -50,21 +52,29 @@ const EditEventPage = async ({ params }: { params: { id: string } }) => {
       <h1 className="h_xl mt-5 mb-10">
         Update <span className="text-primary">event</span>
       </h1>
-      <EventForm
-        type="update"
-        eventId={event.id}
-        title={event.title}
-        description={event.description}
-        image={event.image} 
-        isOnline={event.online}
-        isPublic={event.public}
-        location={event.location}
-        startDateTime={new Date(event.start_date_time)}
-        endDateTime={new Date(event.end_date_time)}
-        hasStarted={event.has_started}
-        hasEnded={event.has_ended}
-        url={event.url}
+      <Suspense
+        fallback={
+          <div className="w-full wrapper min-h-[80vh] fl_center">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        }
+      >
+        <EventForm
+          type="update"
+          eventId={event.id}
+          title={event.title}
+          description={event.description}
+          image={event.image}
+          isOnline={event.online}
+          isPublic={event.public}
+          location={event.location}
+          startDateTime={new Date(event.start_date_time)}
+          endDateTime={new Date(event.end_date_time)}
+          hasStarted={event.has_started}
+          hasEnded={event.has_ended}
+          url={event.url}
         />
+      </Suspense>
     </main>
   );
 };

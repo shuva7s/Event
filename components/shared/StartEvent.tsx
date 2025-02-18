@@ -185,7 +185,7 @@ const StartEvent = ({
         <Button
           className="flex-1"
           variant="success"
-          disabled={isFutureEvent || started}
+          disabled={isFutureEvent || started || loading}
         >
           {loading ? "Starting..." : "Start event"}
         </Button>
