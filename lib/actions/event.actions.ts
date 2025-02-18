@@ -22,6 +22,7 @@ export type EventData = {
   isPublic: boolean;
   startDateTime: Date;
   endDateTime: Date;
+  url: string;
 };
 export async function createEvent({
   title,
@@ -32,6 +33,7 @@ export async function createEvent({
   isPublic = true,
   startDateTime,
   endDateTime,
+  url,
 }: EventData) {
   try {
     const ip = headers().get("x-forwarded-for") || "unknown";
@@ -66,7 +68,7 @@ export async function createEvent({
     const sql = neon(process.env.DATABASE_URL!);
 
     const newEvent = await sql`
-    INSERT INTO event (host_id, title, description, location, image, online, public, start_date_time, end_date_time, created_at, updated_at)
+    INSERT INTO event (host_id, title, description, location, image, online, public, start_date_time, end_date_time, url, created_at, updated_at)
     VALUES (
       ${userId}, 
       ${title}, 
@@ -74,9 +76,10 @@ export async function createEvent({
       ${location}, 
       ${image || null}, 
       ${isOnline}, 
-      ${isPublic}, 
+      ${isPublic},
       ${startDateTime.toISOString()}, 
       ${endDateTime.toISOString()},
+      ${url},
       NOW(), 
       NOW()
     )
@@ -115,8 +118,14 @@ export async function createEvent({
       id: newEvent[0].id,
       error: null,
     };
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    return {
+      success: false,
+      error: {
+        title: "Unknown error",
+        message: error.message || "Failed to create event.",
+      },
+    };
   }
 }
 
@@ -130,6 +139,7 @@ export async function updateEvent({
   isPublic,
   startDateTime,
   endDateTime,
+  url,
 }: EventData & { eventId: string }) {
   // TODO: add rate limit later
   try {
@@ -185,6 +195,7 @@ export async function updateEvent({
           public = ${isPublic},
           start_date_time = ${startDateTime.toISOString()},
           end_date_time = ${endDateTime.toISOString()},
+          url = ${url},
           updated_at = NOW()
         WHERE id = ${eventId} AND host_id = ${userId}
         RETURNING *;
@@ -200,12 +211,20 @@ export async function updateEvent({
       };
     }
 
+    revalidatePath("/");
+
     return {
       success: true,
       error: null,
     };
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    return {
+      success: false,
+      error: {
+        title: "Unknown error",
+        message: error.message || "Failed to create event.",
+      },
+    };
   }
 }
 
@@ -230,13 +249,29 @@ export async function deleteEvent(eventId: string) {
     // Connect to Neon database
     const sql = neon(process.env.DATABASE_URL!);
 
+    const permissionCheck = await sql`
+    SELECT role
+    FROM membership
+    WHERE event_id = ${eventId} AND user_id = ${userId}
+    AND role IN ('host');
+  `;
+
+    if (permissionCheck.length === 0) {
+      return {
+        success: false,
+        error: {
+          title: "Permission denied",
+          message: "Only host can delete the event.",
+        },
+      };
+    }
+
     // Delete the event and related data from the database
     const deletedEvent = await sql`
         DELETE FROM event
         WHERE id = ${eventId} AND host_id = ${userId}
         RETURNING *;
       `;
-
     if (deletedEvent.length === 0) {
       return {
         success: false,
@@ -246,13 +281,24 @@ export async function deleteEvent(eventId: string) {
         },
       };
     }
-
+    if (deletedEvent[0].image !== null) {
+      const oldImageKey = deletedEvent[0].image.split("/").pop();
+      const utapi = new UTApi();
+      await utapi.deleteFiles(oldImageKey);
+    }
+    revalidatePath("/");
     return {
       success: true,
       error: null,
     };
-  } catch (error) {
-    throw error;
+  } catch (error: any) {
+    return {
+      success: false,
+      error: {
+        title: "Unknown error",
+        message: error.message || "Failed to create event.",
+      },
+    };
   }
 }
 

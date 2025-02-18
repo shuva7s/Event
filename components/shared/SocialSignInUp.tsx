@@ -98,27 +98,30 @@ const SocialSignInUp = ({
       </CardHeader>
       <CardContent className="pb-5">
         <div className="flex flex-col gap-3">
-          <Button
-            className="w-full bg-accent-foreground/5 dark:bg-accent/50 dark:hover:bg-accent"
-            variant="ghost"
-            disabled={githubLoading || googleLoading}
-            onClick={handleSignInWithGoogle}
-          >
-            <Image
-              src="/google.svg"
-              alt="google"
-              width={20}
-              height={20}
-              priority={true}
-            />
-            {googleLoading ? (
-              <span className="inline-flex items-center">
-                Signing in <Loader2 className="ml-2 animate-spin" />
-              </span>
-            ) : (
-              "Continue with Google"
-            )}
-          </Button>
+          {!isDev && (
+            <Button
+              className="w-full bg-accent-foreground/5 dark:bg-accent/50 dark:hover:bg-accent"
+              variant="ghost"
+              disabled={githubLoading || googleLoading}
+              onClick={handleSignInWithGoogle}
+            >
+              <Image
+                src="/google.svg"
+                alt="google"
+                width={20}
+                height={20}
+                priority={true}
+              />
+              {googleLoading ? (
+                <span className="inline-flex items-center">
+                  Signing in <Loader2 className="ml-2 animate-spin" />
+                </span>
+              ) : (
+                "Continue with Google"
+              )}
+            </Button>
+          )}
+
           {isDev && (
             <Button
               variant="ghost"

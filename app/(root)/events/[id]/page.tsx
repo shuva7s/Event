@@ -1,3 +1,4 @@
+import DeleteEvent from "@/components/shared/DeleteEvent";
 import Join from "@/components/shared/Join";
 import SendRequest from "@/components/shared/SendRequest";
 import TimeRemaining from "@/components/shared/TimeRemaining";
@@ -20,7 +21,7 @@ const EventPage = async ({ params }: { params: { id: string } }) => {
   });
 
   if (!session) {
-    redirect("/login"); // Redirect to login if user is not authenticated
+    redirect("/sign-in"); // Redirect to login if user is not authenticated
   }
 
   const userId = session.user.id;
@@ -81,12 +82,26 @@ const EventPage = async ({ params }: { params: { id: string } }) => {
             {event.is_member ? (
               <>
                 {event.host_id === session.user.id ? (
-                  <div className="flex flex-row gap-2 flex-wrap">
-                    <Button variant="success" disabled className="flex-1">
-                      Start event
+                  <div className="flex flex-row gap-2 flex-wrap justify-end items-center">
+                    {!event.has_started && !event.has_ended && (
+                      <Button variant="success" className="flex-1">
+                        Start event
+                      </Button>
+                    )}
+                    {event.has_started && !event.has_ended && (
+                      <Button variant="destructive" disabled>
+                        End event
+                      </Button>
+                    )}
+
+                    <Button variant="secondary" asChild>
+                      <Link href={`/events/${params.id}/edit`}>Edit</Link>
                     </Button>
-                    <Button variant="secondary">Edit</Button>
-                    <Button variant="destructive">Delete</Button>
+                    <DeleteEvent
+                      eventId={event.id}
+                      hasEnded={event.has_ended}
+                      hasStarted={event.has_started}
+                    />
                   </div>
                 ) : (
                   <Button variant="destructive">Leave</Button>

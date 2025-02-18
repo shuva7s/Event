@@ -1,5 +1,5 @@
 {
-  "id": "b803a1c4-0c65-4f26-9612-8729c38a12b9",
+  "id": "df1fe55f-e927-43cd-9810-384da0a5f864",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -175,6 +175,26 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
+        },
+        "has_started": {
+          "name": "has_started",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "has_ended": {
+          "name": "has_ended",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",

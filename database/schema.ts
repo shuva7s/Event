@@ -73,7 +73,7 @@ export const event = pgTable("event", {
   endDateTime: timestamp("end_date_time").notNull(),
   hasStarted: boolean("has_started").default(false),
   hasEnded: boolean("has_ended").default(false),
-  offlineDayCount: integer("offline_day_count").default(0),
+  url: text("url"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at")
     .notNull()

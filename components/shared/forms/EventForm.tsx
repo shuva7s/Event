@@ -35,6 +35,7 @@ const EventForm = ({
   isPublic = true,
   startDateTime,
   endDateTime,
+  url,
 }: {
   type: "create" | "update";
   eventId?: string;
@@ -46,6 +47,7 @@ const EventForm = ({
   location?: string;
   startDateTime?: Date;
   endDateTime?: Date;
+  url?: string;
 }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -72,6 +74,7 @@ const EventForm = ({
       isPublic: isPublic || true,
       startDateTime: startDateTime || new Date(),
       endDateTime: endDateTime || new Date(Date.now() + 60 * 60 * 1000), // Default to 1 hour later
+      url: url || "",
     },
   });
 
@@ -148,9 +151,10 @@ const EventForm = ({
         description: success ? "Event updated successfully" : error?.message,
         variant: success ? "success" : "destructive",
       });
+      router.replace(`/events/${eventId}`);
     }
   }
-
+  isOnline = form.watch("isOnline");
   return (
     <section>
       <Form {...form}>
@@ -335,17 +339,39 @@ const EventForm = ({
                 control={form.control}
                 name="location"
                 render={({ field }) => {
-                  const isOnline = form.watch("isOnline");
                   return (
                     <FormItem>
-                      <FormLabel>Location {"(Optional)"}</FormLabel>
+                      <FormLabel>
+                        Location {isOnline ? "(Optional)" : "(Required)"}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder={
-                            isOnline
-                              ? "Enter an online meetup link"
-                              : "Enter event location"
-                          }
+                          required={!isOnline}
+                          placeholder={"Enter event location"}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+
+              {/* URL */}
+              <FormField
+                control={form.control}
+                name="url"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>
+                        Meeting link {!isOnline ? "(Optional)" : "(Required)"}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          required={isOnline}
+                          type="url"
+                          placeholder={"Enter an online meetup link"}
                           {...field}
                         />
                       </FormControl>
@@ -363,8 +389,8 @@ const EventForm = ({
             disabled={
               isUploading ||
               processing ||
-              !form.formState.isValid ||
-              form.formState.isSubmitting
+              form.formState.isSubmitting ||
+              !form.formState.isDirty
             }
           >
             {buttonText}

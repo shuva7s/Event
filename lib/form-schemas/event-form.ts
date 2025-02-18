@@ -13,7 +13,9 @@ export const eventFormSchema = object({
   isPublic: boolean(),
   startDateTime: date({ required_error: "Start date time is required" }),
   endDateTime: date({ required_error: "End date time is required" }),
-}).refine((data) => data.endDateTime > data.startDateTime, {
-  message: "End date time must be after start date time",
-  path: ["endDateTime"],
-});
+  url: string(),
+})
+  .refine((data) => data.endDateTime > data.startDateTime, {
+    message: "End date time must be after start date time",
+    path: ["endDateTime"],
+  })

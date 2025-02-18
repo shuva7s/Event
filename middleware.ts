@@ -2,7 +2,7 @@ import { betterFetch } from "@better-fetch/fetch";
 import { NextResponse, type NextRequest } from "next/server";
 import { Session } from "./lib/auth";
 
-const publicRoute = ["/", "/api/uploadthing"];
+const publicRoute = ["/", "/api/uploadthing", "/api/daily/cron"];
 const authRoutes = ["/sign-in", "/sign-up"];
 
 export default async function authMiddleware(request: NextRequest) {
