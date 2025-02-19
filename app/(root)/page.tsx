@@ -58,10 +58,13 @@ const HomePage = async () => {
           </>
         ) : (
           <>
-            <h1 className="h_lg">Not authenticated</h1>
-            <Button asChild>
-              <Link href="/sign-in">Sign in</Link>
-            </Button>
+            <section className="min-h-[83vh] fl_center flex-col">
+              <h1 className="h_lg">You are missing out</h1>
+              <p className="p_md text-muted-foreground">Sign in to explore the world of events</p>
+              <Button asChild className="mt-2" size="lg">
+                <Link href="/sign-in">Sign in</Link>
+              </Button>
+            </section>
           </>
         )}
       </main>
