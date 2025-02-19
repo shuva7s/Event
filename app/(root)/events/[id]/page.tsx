@@ -46,6 +46,8 @@ const EventPage = async ({ params }: { params: { id: string } }) => {
 
   const event = eventQuery[0];
 
+  // console.log(event);
+
   if (!event) {
     redirect("/"); // Redirect if event does not exist
   }
@@ -53,7 +55,7 @@ const EventPage = async ({ params }: { params: { id: string } }) => {
   return (
     <main className="wrapper">
       <section className="grid gap-5 md:gap-10 grid-cols-1 md:grid-cols-2">
-        <div className="rounded-2xl w-full bg-accent overflow-hidden flex fl_center aspect-square max-h-[600px]">
+        <div className="rounded-2xl w-full bg-accent overflow-hidden flex fl_center aspect-square max-h-[600px] md:sticky top-10">
           {event.image ? (
             <Image
               className="w-full h-full select-none object-cover"
@@ -113,6 +115,25 @@ const EventPage = async ({ params }: { params: { id: string } }) => {
                   </div>
                 ) : (
                   <Button variant="destructive">Leave</Button>
+                )}
+
+                {event.location && (
+                  <div className="p-5 bg-accent dark:bg-accent/50 dark:hover:bg-accent/80 transition-colors rounded-2xl text-muted-foreground">
+                    <span className="text-foreground">Location: </span>
+                    {event.location}
+                  </div>
+                )}
+                {event.url && (
+                  <div className="py-3 px-5 bg-accent dark:bg-accent/50 dark:hover:bg-accent/80 transition-colors rounded-full text-nowrap overflow-hidden">
+                    <span className="text-foreground">Meeting link: </span>
+                    <Link
+                      target="_blank"
+                      className="text-primary"
+                      href={event.url}
+                    >
+                      {event.url}
+                    </Link>
+                  </div>
                 )}
               </>
             ) : (

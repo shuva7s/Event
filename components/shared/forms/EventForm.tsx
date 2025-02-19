@@ -715,8 +715,8 @@ const EventForm = ({
                         }
                         maxTime={new Date(0, 0, 0, 23, 59)}
                         dateFormat="dd/MM/yyyy h:mm aa"
-                        wrapperClassName="bg-background w-full"
-                        className="bg-transparent h-10 border px-2 py-3 rounded-full w-full outline-none focus:border-primary text-muted-foreground"
+                        wrapperClassName="bg-background w-full rounded-full"
+                        className="bg-transparent rounded-full h-10 border px-2 py-3 w-full outline-none focus:border-primary text-muted-foreground"
                         popperClassName="rounded-xl overflow-hidden"
                         disabled={hasStarted}
                       />
@@ -749,7 +749,7 @@ const EventForm = ({
                         } // Always at least 1 hour later
                         maxTime={new Date(0, 0, 0, 23, 59)}
                         dateFormat="dd/MM/yyyy h:mm aa"
-                        wrapperClassName="bg-background w-full"
+                        wrapperClassName="bg-background w-full rounded-full"
                         className="bg-transparent h-10 border px-2 py-3 rounded-full w-full outline-none focus:border-primary text-muted-foreground"
                         popperClassName="rounded-xl overflow-hidden"
                         disabled={hasStarted}

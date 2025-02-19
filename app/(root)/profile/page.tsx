@@ -21,7 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import SignOutButton from "@/components/shared/SignOutButton";
 import EditProfile from "@/components/shared/EditProfile";
 
-const DashboardPage = async () => {
+const profilePage = async () => {
   /* eslint-disable prefer-const */
   let [session, activeSessions, accounts] = await Promise.all([
     auth.api.getSession({
@@ -84,7 +84,7 @@ const DashboardPage = async () => {
         <CardContent className="flex flex-col gap-5">
           <div>
             <h2 className="font-semibold mb-4">Active sessions</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               {parsedSessions.map((s) => (
                 <div
                   key={s.id}
@@ -100,13 +100,13 @@ const DashboardPage = async () => {
                     )}
                   </div>
 
-                  <div className="flex-1 flex flex-row flex-wrap justify-between items-center">
+                  <div className="flex-1 flex flex-row flex-wrap justify-between items-center relative">
                     <p className="text-lg">
                       {s.os}, {s.browser}
                     </p>
 
                     {s.isCurrent ? (
-                      <Badge className="h-8" variant="success">
+                      <Badge className="h-8 absolute right-0" variant="success">
                         Current
                       </Badge>
                     ) : (
@@ -115,8 +115,12 @@ const DashboardPage = async () => {
                   </div>
                 </div>
               ))}
-              {activeSessions.length > 1 && <RevokeSessions />}
             </div>
+            {activeSessions.length > 1 && (
+              <div className="w-full mt-5 flex justify-end">
+                <RevokeSessions />
+              </div>
+            )}
           </div>
 
           <div>
@@ -160,4 +164,4 @@ const DashboardPage = async () => {
   );
 };
 
-export default DashboardPage;
+export default profilePage;

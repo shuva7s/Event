@@ -8,6 +8,7 @@ import Hero from "@/components/shared/Hero";
 import { Plus } from "lucide-react";
 import { neon } from "@neondatabase/serverless";
 import HostedEvents from "./HostedEvents";
+import Footer from "@/components/shared/Footer";
 const HomePage = async () => {
   const session = await auth.api.getSession({
     headers: headers(),
@@ -31,37 +32,41 @@ const HomePage = async () => {
     ORDER BY e.created_at DESC;
   `;
   }
+  // console.log(events[0]);
   return (
-    <main className="wrapper min-h-[80vh]">
-      {session ? (
-        <>
-          <Hero />
-          <section className="flex flex-row justify-between flex-wrap gap-4 py-5 items-center">
-            <h1 className="h_sm">Your events</h1>
-            <Button asChild className="hidden sm:inline-flex">
-              <Link href="/create-event">
-                <Plus /> Create event
-              </Link>
+    <>
+      <main className="wrapper min-h-[80vh]">
+        {session ? (
+          <>
+            <Hero />
+            <section className="flex flex-row justify-between flex-wrap gap-4 py-5 items-center">
+              <h1 className="h_sm">Your events</h1>
+              <Button asChild className="hidden sm:inline-flex">
+                <Link href="/create-event">
+                  <Plus /> Create event
+                </Link>
+              </Button>
+              <Button asChild size="icon" className="sm:hidden">
+                <Link href="/create-event">
+                  <Plus className="scale-125" />
+                </Link>
+              </Button>
+            </section>
+            <Suspense fallback={<SimpleLoader />}>
+              <HostedEvents events={events} currentUserId={session.user.id} />
+            </Suspense>
+          </>
+        ) : (
+          <>
+            <h1 className="h_lg">Not authenticated</h1>
+            <Button asChild>
+              <Link href="/sign-in">Sign in</Link>
             </Button>
-            <Button asChild size="icon" className="sm:hidden">
-              <Link href="/create-event">
-                <Plus className="scale-125" />
-              </Link>
-            </Button>
-          </section>
-          <Suspense fallback={<SimpleLoader />}>
-            <HostedEvents events={events} currentUserId={session.user.id} />
-          </Suspense>
-        </>
-      ) : (
-        <>
-          <h1 className="h_lg">Not authenticated</h1>
-          <Button asChild>
-            <Link href="/sign-in">Sign in</Link>
-          </Button>
-        </>
-      )}
-    </main>
+          </>
+        )}
+      </main>
+      <Footer />
+    </>
   );
 };
 

@@ -14,6 +14,7 @@ const RevokeSession = ({ token }: { token: string }) => {
     <Button
       size="sm"
       variant={"destructive"}
+      className="absolute right-0"
       onClick={async () => {
         setLoading(true);
         const res = await authClient.revokeSession({

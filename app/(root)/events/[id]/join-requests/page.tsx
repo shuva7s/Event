@@ -58,7 +58,7 @@ const JoinRequestsPage = async ({ params }: { params: { id: string } }) => {
     redirect("/"); // Redirect if event does not exist
   }
 
-  console.log("event", event);
+  // console.log("event", event);
 
   if (!event.is_member) {
     redirect(`/events/${params.id}`);
