@@ -1,5 +1,5 @@
-import Dp from "@/components/shared/cards/Dp";
-import EventCard from "@/components/shared/cards/EventCard";
+import Dp from "@/components/app_components/cards/Dp";
+import EventCard from "@/components/app_components/cards/EventCard";
 import { Badge } from "@/components/ui/badge";
 import { auth } from "@/lib/auth";
 import { neon } from "@neondatabase/serverless";
@@ -35,7 +35,7 @@ const page = async ({ params }: { params: { id: string } }) => {
 
   const data = userQuery[0];
 
-  console.log(data.events);
+  // console.log(data.events);
 
   if (!data) {
     redirect("/");

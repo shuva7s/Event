@@ -4,11 +4,11 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { Suspense } from "react";
 import SimpleLoader from "@/components/loaders/SimpleLoader";
-import Hero from "@/components/shared/Hero";
+import Hero from "@/components/app_components/Hero";
 import { Plus } from "lucide-react";
 import { neon } from "@neondatabase/serverless";
-import HostedEvents from "./HostedEvents";
-import Footer from "@/components/shared/Footer";
+import Footer from "@/components/app_components/Footer";
+import MyEvents from "./MyEvents";
 const HomePage = async () => {
   const session = await auth.api.getSession({
     headers: headers(),
@@ -53,7 +53,7 @@ const HomePage = async () => {
               </Button>
             </section>
             <Suspense fallback={<SimpleLoader />}>
-              <HostedEvents events={events} currentUserId={session.user.id} />
+              <MyEvents events={events} currentUserId={session.user.id} />
             </Suspense>
           </>
         ) : (

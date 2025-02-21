@@ -1,5 +1,5 @@
-import AccRejBan from "@/components/shared/AccRejBan";
-import Dp from "@/components/shared/cards/Dp";
+import AccRejBan from "@/components/app_components/AccRejBan";
+import Dp from "@/components/app_components/cards/Dp";
 import { auth } from "@/lib/auth";
 import { neon } from "@neondatabase/serverless";
 import { Loader2 } from "lucide-react";

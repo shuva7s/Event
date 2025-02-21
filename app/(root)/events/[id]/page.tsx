@@ -1,9 +1,9 @@
-import DeleteEvent from "@/components/shared/DeleteEvent";
-import EndEvent from "@/components/shared/EndEvent";
-import Join from "@/components/shared/Join";
-import SendRequest from "@/components/shared/SendRequest";
-import StartEvent from "@/components/shared/StartEvent";
-import TimeRemaining from "@/components/shared/TimeRemaining";
+import DeleteEvent from "@/components/app_components/DeleteEvent";
+import EndEvent from "@/components/app_components/EndEvent";
+import Join from "@/components/app_components/Join";
+import SendRequest from "@/components/app_components/SendRequest";
+import StartEvent from "@/components/app_components/StartEvent";
+import TimeRemaining from "@/components/app_components/TimeRemaining";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
 import { neon } from "@neondatabase/serverless";
@@ -70,7 +70,7 @@ const EventPage = async ({ params }: { params: { id: string } }) => {
             <ImageIcon className="w-12 h-12 text-muted-foreground" />
           )}
         </div>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 mb-5">
           <h1 className="h_xl md:mt-3">{event.title}</h1>
           <p className="p_lg text-muted-foreground">{event.description}</p>
           <div className="flex flex-col gap-5">

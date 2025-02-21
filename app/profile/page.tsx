@@ -1,7 +1,5 @@
-import Dp from "@/components/shared/cards/Dp";
-import RevokeSession from "@/components/shared/RevokeSession";
-import RevokeSessions from "@/components/shared/RevokeSessions";
-import UnlinkAccount from "@/components/shared/UnlinkAccount";
+import RevokeSession from "@/components/auth_components/RevokeSession";
+import RevokeSessions from "@/components/auth_components/RevokeSessions";
 import { auth } from "@/lib/auth";
 import { Session, User } from "better-auth";
 import { LaptopMinimal, Smartphone, Monitor } from "lucide-react";
@@ -18,8 +16,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import SignOutButton from "@/components/shared/SignOutButton";
-import EditProfile from "@/components/shared/EditProfile";
+import SignOutButton from "@/components/auth_components/SignOutButton";
+import EditProfile from "@/components/auth_components/EditProfile";
+import Dp from "@/components/app_components/cards/Dp";
+import UnlinkAccount from "@/components/auth_components/UnlinkAccount";
 
 const profilePage = async () => {
   /* eslint-disable prefer-const */
@@ -65,7 +65,7 @@ const profilePage = async () => {
     });
 
   return (
-    <main className="w-full wrapper min-h-[80vh] fl_center">
+    <main className="w-full wrapper min-h-screen py-5 fl_center">
       <Card className="w-full max-w-3xl shadow-xl shadow-accent dark:shadow-none md:p-2">
         <CardHeader className="flex-row items-center flex-wrap gap-4 relative">
           <Dp
@@ -79,7 +79,11 @@ const profilePage = async () => {
             <CardDescription>{user.email}</CardDescription>
           </div>
 
-          <EditProfile className="absolute right-6 z-10 text-muted-foreground" />
+          <EditProfile
+            className="absolute right-6 z-10 text-muted-foreground"
+            image={user.image || "https://github.com/shadcn.png"}
+            name={user.name}
+          />
         </CardHeader>
         <CardContent className="flex flex-col gap-5">
           <div>

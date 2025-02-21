@@ -1,5 +1,5 @@
-import Dp from "@/components/shared/cards/Dp";
-import RemoveUser from "@/components/shared/RemoveUser";
+import Dp from "@/components/app_components/cards/Dp";
+import RemoveUser from "@/components/app_components/RemoveUser";
 import { Badge } from "@/components/ui/badge";
 import { auth } from "@/lib/auth";
 import { neon } from "@neondatabase/serverless";

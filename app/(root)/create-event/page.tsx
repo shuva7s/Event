@@ -1,4 +1,4 @@
-import EventForm from "@/components/shared/forms/EventForm";
+import EventForm from "@/components/app_components/forms/EventForm";
 
 const CreateEventPage = () => {
   return (

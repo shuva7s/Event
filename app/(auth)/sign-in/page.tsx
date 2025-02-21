@@ -1,4 +1,4 @@
-import SocialSignInUp from "@/components/shared/SocialSignInUp";
+import SocialSignInUp from "@/components/auth_components/SocialSignInUp";
 
 const SignInPage = () => {
   const development = process.env.DEPLOYMENT_MODE === "DEV";

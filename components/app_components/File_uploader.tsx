@@ -14,6 +14,7 @@ type FileUploaderProps = {
   setFiles: Dispatch<SetStateAction<File[]>>;
   disabled?: boolean;
   placeHolder?: React.ReactNode;
+  max_file_size_mb?: number;
 };
 
 export function File_uploader({
@@ -22,10 +23,10 @@ export function File_uploader({
   setFiles,
   disabled = false,
   placeHolder,
+  max_file_size_mb = 2,
 }: FileUploaderProps) {
   const { toast } = useToast();
-  const MAX_FILE_SIZE_MB = 2;
-  const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+  const MAX_FILE_SIZE_BYTES = max_file_size_mb * 1024 * 1024;
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -35,7 +36,7 @@ export function File_uploader({
         if (selectedFile.size > MAX_FILE_SIZE_BYTES) {
           toast({
             title: "File too large",
-            description: `The selected file is too large. Maximum size allowed is ${MAX_FILE_SIZE_MB}MB.`,
+            description: `The selected file is too large. Maximum size allowed is ${max_file_size_mb}MB.`,
             variant: "destructive",
           });
           return;
@@ -45,7 +46,7 @@ export function File_uploader({
         onFieldChange(convertFileToUrl(selectedFile));
       }
     },
-    [onFieldChange, setFiles, toast, MAX_FILE_SIZE_BYTES]
+    [onFieldChange, setFiles, toast, MAX_FILE_SIZE_BYTES, max_file_size_mb]
   );
 
   const handleDeselectImage = () => {

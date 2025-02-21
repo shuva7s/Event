@@ -1,8 +1,8 @@
 "use client";
 
-import EventCard from "@/components/shared/cards/EventCard";
+import EventCard from "@/components/app_components/cards/EventCard";
 
-const HostedEvents = ({
+const MyEvents = ({
   events,
   currentUserId,
 }: {
@@ -10,7 +10,7 @@ const HostedEvents = ({
   currentUserId: string;
 }) => {
   return (
-    <section>
+    <section className="min-h-[50vh]">
       <div className="columns-1 md:columns-2 lg:columns-3 space-y-4">
         {events.length > 0 ? (
           events.map((event) => (
@@ -31,11 +31,11 @@ const HostedEvents = ({
             />
           ))
         ) : (
-          <p>No events</p>
+          <p className="text-muted-foreground">No events to show</p>
         )}
       </div>
     </section>
   );
 };
 
-export default HostedEvents;
+export default MyEvents;

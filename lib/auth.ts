@@ -14,7 +14,14 @@ export const auth = betterAuth({
       verification,
     },
   }),
-
+  rateLimit: {
+    customRules: {
+      "/update-user": {
+        window: 60, // time window in seconds
+        max: 3, // max requests in the window
+      },
+    },
+  },
   account: {
     accountLinking: {
       enabled: true,

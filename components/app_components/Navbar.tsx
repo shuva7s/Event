@@ -18,7 +18,7 @@ const Navbar = async () => {
             <>
               <div className="h-4 w-0.5 rounded-full bg-accent" />
               <Link href="/profile">
-                <Dp src={session.user.image} name={session.user.name} />
+                <Dp src={session.user.image} name={session.user.name} className="w-[calc(2.5rem-1px)] h-[calc(2.5rem-1px)]" />
               </Link>
             </>
           )}

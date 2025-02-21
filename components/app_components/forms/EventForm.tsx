@@ -553,20 +553,13 @@ const EventForm = ({
           setIsUploading(true);
           setProcessing(true);
           const uploadedImages = await startUpload(files);
-
           if (!uploadedImages) {
-            setIsUploading(false);
             return;
           }
-
           values.image = uploadedImages[0].url;
-          setIsUploading(false);
         }
-
         const { success, error, id } = await createEvent(values);
-
         form.reset();
-
         if (success) {
           router.push(`/events/${id}`);
         }
@@ -581,6 +574,9 @@ const EventForm = ({
           description: error.message || "Something went wrong.",
           variant: "destructive",
         });
+      } finally {
+        setProcessing(false);
+        setIsUploading(false);
       }
     } else {
       if (files.length > 0) {
@@ -634,7 +630,7 @@ const EventForm = ({
   }
 
   return (
-    <section>
+    <section className="pb-6">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

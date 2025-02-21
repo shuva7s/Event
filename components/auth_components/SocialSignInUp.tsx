@@ -23,48 +23,17 @@ const SocialSignInUp = ({
   login?: boolean;
   isDev?: boolean;
 }) => {
-  const [githubLoading, setGithubLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
+  const [reqForSignIn, setReqForSignIn] = useState(false);
   const { toast } = useToast();
 
-  const handleSignInWithGithub = async () => {
+  const handleSocialSignInUp = async (provider: "google" | "github") => {
     await authClient.signIn.social(
       {
-        provider: "github",
+        provider,
       },
       {
         onRequest: () => {
-          setGithubLoading(true);
-        },
-        onSuccess: async () => {
-          // toast({
-          //   title: "Success",
-          //   description: login
-          //     ? "You have signed in successfully."
-          //     : "You have signed up successfully.",
-          //   variant: "success",
-          // });
-        },
-        onError: (ctx: ErrorContext) => {
-          toast({
-            title: "Error",
-            description: ctx.error.message ?? "Something went wrong.",
-            variant: "destructive",
-          });
-        },
-      }
-    );
-    setGithubLoading(false);
-  };
-
-  const handleSignInWithGoogle = async () => {
-    await authClient.signIn.social(
-      {
-        provider: "google",
-      },
-      {
-        onRequest: () => {
-          setGoogleLoading(true);
+          setReqForSignIn(true);
         },
         onSuccess: async () => {
           // toast({
@@ -77,6 +46,7 @@ const SocialSignInUp = ({
         },
 
         onError: (ctx: ErrorContext) => {
+          setReqForSignIn(false);
           toast({
             title: "Error",
             description: ctx.error.message ?? "Something went wrong.",
@@ -85,14 +55,13 @@ const SocialSignInUp = ({
         },
       }
     );
-    setGoogleLoading(false);
   };
 
   return (
     <Card className="w-full max-w-[450px] shadow-none bg-background/90 backdrop-blur-lg md:p-2 dark:border-none rounded-2xl">
       <CardHeader>
         <CardTitle>{login ? "Sign in" : "Sign up"}</CardTitle>
-        <CardDescription className="text-base text-foreground">
+        <CardDescription className="text-base">
           Sign in to your account
         </CardDescription>
       </CardHeader>
@@ -102,8 +71,8 @@ const SocialSignInUp = ({
             <Button
               className="w-full bg-accent-foreground/5 dark:bg-accent/50 dark:hover:bg-accent"
               variant="ghost"
-              disabled={githubLoading || googleLoading}
-              onClick={handleSignInWithGoogle}
+              disabled={reqForSignIn}
+              onClick={() => handleSocialSignInUp("google")}
             >
               <Image
                 src="/google.svg"
@@ -112,13 +81,7 @@ const SocialSignInUp = ({
                 height={20}
                 priority={true}
               />
-              {googleLoading ? (
-                <span className="inline-flex items-center">
-                  Signing in <Loader2 className="ml-2 animate-spin" />
-                </span>
-              ) : (
-                "Continue with Google"
-              )}
+              Continue with Google
             </Button>
           )}
 
@@ -126,8 +89,8 @@ const SocialSignInUp = ({
             <Button
               variant="ghost"
               className="w-full bg-accent-foreground/5 dark:bg-accent/50 dark:hover:bg-accent"
-              disabled={githubLoading || googleLoading}
-              onClick={handleSignInWithGithub}
+              disabled={reqForSignIn}
+              onClick={() => handleSocialSignInUp("github")}
             >
               <Image
                 src="/github.svg"
@@ -137,20 +100,14 @@ const SocialSignInUp = ({
                 height={20}
                 priority={true}
               />
-              {githubLoading ? (
-                <span className="inline-flex items-center">
-                  Signing in <Loader2 className="ml-2 animate-spin" />
-                </span>
-              ) : (
-                "Continue with Github"
-              )}
+              Continue with Github
             </Button>
           )}
         </div>
       </CardContent>
       <CardFooter className="justify-center text-sm dark:text-muted-foreground pb-3">
-        {githubLoading || googleLoading ? (
-          <span>{login ? "Signing in" : "Signing up"}</span>
+        {reqForSignIn ? (
+          <Loader2 className="animate-spin text-primary" />
         ) : (
           <p>
             {login ? "Don't have an account? " : "Already have an account? "}

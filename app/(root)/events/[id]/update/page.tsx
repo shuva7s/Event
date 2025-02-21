@@ -1,4 +1,4 @@
-import EventForm from "@/components/shared/forms/EventForm";
+import EventForm from "@/components/app_components/forms/EventForm";
 import { auth } from "@/lib/auth";
 import { neon } from "@neondatabase/serverless";
 import { Loader2 } from "lucide-react";

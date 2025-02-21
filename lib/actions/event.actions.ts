@@ -728,3 +728,42 @@ export async function handleStartEnd({
     };
   }
 }
+
+export async function leaveEvent(eventId: string) {
+  try {
+    const session = await auth.api.getSession({
+      headers: headers(),
+    });
+
+    if (!session) {
+      return {
+        success: false,
+        error: {
+          title: "You are not signed in",
+          message: "You must be logged in to perform this action",
+        },
+      };
+    }
+
+    const userId = session.user.id;
+
+    const sql = neon(process.env.DATABASE_URL!);
+
+    await sql`
+      DELETE FROM membership 
+      WHERE event_id = ${eventId} AND user_id = ${userId}
+    `;
+
+    return {
+      success: true,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: {
+        title: "Unknown error",
+        message: error.message || "Something went wrong",
+      },
+    };
+  }
+}
