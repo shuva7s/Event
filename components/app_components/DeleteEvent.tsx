@@ -26,12 +26,15 @@ const DeleteEvent = ({
   hasEnded: boolean;
 }) => {
   const [loading, setLoading] = useState(false);
+  const [hasDeleted, setHasDeleted] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
   async function handleDelete() {
     setLoading(true);
+    setHasDeleted(true);
     const { success, error } = await deleteEvent(eventId);
     setLoading(false);
+    if (!success) setHasDeleted(false);
     toast({
       title: success ? "Success" : "Error",
       description: success
@@ -46,7 +49,7 @@ const DeleteEvent = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"destructive"} disabled={hasStarted && !hasEnded}>
+        <Button variant={"destructive"} disabled={hasStarted && !hasEnded || hasDeleted}>
           {loading ? "Deleting..." : "Delete"}
         </Button>
       </DialogTrigger>
