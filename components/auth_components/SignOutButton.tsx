@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { authClient } from "@/lib/auth-client";
 
-const SignOutButton = () => {
+const SignOutButton = ({afterSignOutUrl = "/sign-in"}:{afterSignOutUrl?:string}) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
@@ -16,7 +16,7 @@ const SignOutButton = () => {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/sign-in");
+          router.push(afterSignOutUrl);
           router.refresh();
         },
         onError(ctx) {
