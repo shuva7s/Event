@@ -107,11 +107,12 @@ const EditProfile = ({
     >
       <DialogTrigger asChild>
         <Button
-          size="icon"
-          className={cn(className, "bg-primary/50")}
+          size="sm"
+          variant="secondary"
+          className={cn(className)}
           disabled={processing}
         >
-          {processing ? <Loader2 className="animate-spin" /> : <Pencil className="text-white" />}
+          {processing ? <Loader2 className="animate-spin" /> : <Pencil className="text-foreground" />}
         </Button>
       </DialogTrigger>
       <DialogContent>

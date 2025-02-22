@@ -10,16 +10,20 @@ const RevokeSession = ({ token }: { token: string }) => {
   const { toast } = useToast();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [revoked, setRevoked] = useState(false);
   return (
     <Button
       size="sm"
       variant={"destructive"}
       className="absolute right-0"
+      disabled={loading || revoked}
       onClick={async () => {
+        setRevoked(true);
         setLoading(true);
         const res = await authClient.revokeSession({
           token,
         });
+        if (res.error) setRevoked(false);
         setLoading(false);
         router.refresh();
         toast({

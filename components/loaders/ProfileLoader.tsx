@@ -18,8 +18,7 @@ const ProfileLoader = () => {
           <Skeleton className="h-24 rounded-lg" />
         </div>
       </div>
-      <div className="flex flex-row flex-wrap items-center justify-between">
-        <Skeleton className="h-4 w-20 rounded-2xl" />
+      <div className="flex justify-end">
         <Skeleton className="h-8 w-20 rounded-2xl" />
       </div>
     </section>

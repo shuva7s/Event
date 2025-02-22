@@ -10,15 +10,19 @@ const UnlinkAccount = ({ provider }: { provider: string }) => {
   const { toast } = useToast();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [unlinked, setUnlinked] = useState(false);
   return (
     <Button
       size="sm"
       variant={"destructive"}
+      disabled={loading || unlinked}
       onClick={async () => {
         setLoading(true);
+        setUnlinked(true);
         const res = await authClient.unlinkAccount({
           providerId: provider,
         });
+        if (res.error) setUnlinked(false);
         setLoading(false);
         router.refresh();
         toast({

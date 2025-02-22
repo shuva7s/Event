@@ -9,14 +9,17 @@ const RevokeSessions = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
+  const [sessionsRevoked, setSessionsRevoked] = useState(false);
   return (
     <Button
       size="sm"
       variant={"destructive"}
+      disabled={loading || sessionsRevoked}
       onClick={async () => {
         setLoading(true);
+        setSessionsRevoked(true);
         const res = await authClient.revokeOtherSessions();
+        if (res.error) setSessionsRevoked(false);
         setLoading(false);
         router.refresh();
         toast({

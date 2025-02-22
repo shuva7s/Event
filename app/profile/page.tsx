@@ -64,7 +64,7 @@ async function Renderer() {
     });
 
   return (
-    <section className="w-full max-w-3xl flex flex-col gap-5">
+    <section className="w-full max-w-3xl flex flex-col">
       <div className="flex items-center gap-3 relative shadow-lg shadow-border dark:shadow-none dark:bg-accent border p-4 rounded-2xl flex-wrap">
         <Dp
           className="w-[3.5rem] h-[3.5rem]"
@@ -84,7 +84,7 @@ async function Renderer() {
         />
       </div>
 
-      <div>
+      <div className="mt-5">
         <h2 className="font-semibold mb-4 ml-2">Active sessions</h2>
         <div className="grid grid-cols-1 gap-4">
           {parsedSessions.map((s) => (
@@ -125,7 +125,7 @@ async function Renderer() {
         )}
       </div>
 
-      <div>
+      <div className={activeSessions.length > 1 ? "" : "mt-5"}>
         <h2 className="font-semibold mb-4 ml-2">Accounts</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {accounts.map((a) => (
@@ -153,8 +153,7 @@ async function Renderer() {
         </div>
       </div>
 
-      <div className="flex flex-row flex-wrap items-center justify-between">
-        <p className="text-muted-foreground">Wanna sign out?</p>
+      <div className="flex justify-end mt-5">
         <SignOutButton afterSignOutUrl="/" />
       </div>
     </section>
