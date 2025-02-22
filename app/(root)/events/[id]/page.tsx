@@ -1,6 +1,7 @@
 import DeleteEvent from "@/components/app_components/DeleteEvent";
 import EndEvent from "@/components/app_components/EndEvent";
 import Join from "@/components/app_components/Join";
+import LeaveEvent from "@/components/app_components/LeaveEvent";
 import SendRequest from "@/components/app_components/SendRequest";
 import StartEvent from "@/components/app_components/StartEvent";
 import TimeRemaining from "@/components/app_components/TimeRemaining";
@@ -111,7 +112,7 @@ async function Renderer({ eventId }: { eventId: string }) {
                   )}
                 </div>
               ) : (
-                <Button variant="destructive">Leave</Button>
+                <LeaveEvent eventId={event.id} />
               )}
 
               {event.location && (

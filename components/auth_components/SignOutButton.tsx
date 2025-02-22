@@ -10,9 +10,11 @@ const SignOutButton = ({afterSignOutUrl = "/sign-in"}:{afterSignOutUrl?:string})
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+  const[signedOut, setSignedOut] = useState(false);
 
   const handleSignOut = async () => {
     setLoading(true);
+    setSignedOut(true);
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
@@ -20,7 +22,7 @@ const SignOutButton = ({afterSignOutUrl = "/sign-in"}:{afterSignOutUrl?:string})
           router.refresh();
         },
         onError(ctx) {
-          console.error("Error signing out:", ctx.error);
+          setSignedOut(false);
           toast({
             title: "Error",
             description: ctx.error.message ?? "Something went wrong",
@@ -32,7 +34,7 @@ const SignOutButton = ({afterSignOutUrl = "/sign-in"}:{afterSignOutUrl?:string})
     setLoading(false);
   };
   return (
-    <Button variant="secondary" disabled={loading} onClick={handleSignOut}>
+    <Button variant="secondary" disabled={loading || signedOut} onClick={handleSignOut}>
       {loading ? "Signing out..." : "Sign out"}
     </Button>
   );

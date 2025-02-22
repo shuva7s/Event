@@ -26,11 +26,16 @@ const RemoveUser = ({
   targetUserName: string;
 }) => {
   const [loading, setLoading] = useState(false);
+  const [hasBeenRemoved, setHasBeenRemoved] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
   async function handleRemoveUser() {
     setLoading(true);
+    setHasBeenRemoved(true);
     const { success, error } = await removeUser({ eventId, targetUserId });
+
+    if (!success) setHasBeenRemoved(false);
+    else router.refresh();
     toast({
       title: success ? "Success" : "Error",
       description: success
@@ -39,12 +44,11 @@ const RemoveUser = ({
       variant: success ? "success" : "destructive",
     });
     setLoading(false);
-    router.refresh();
   }
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button disabled={loading} variant={"destructive"}>
+        <Button disabled={loading || hasBeenRemoved} variant={"destructive"}>
           {loading ? "Removing..." : "Remove"}
         </Button>
       </DialogTrigger>

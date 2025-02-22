@@ -19,6 +19,7 @@ const AccRejBan = ({
   const [acceptLoading, setAcceptLoading] = useState(false);
   const [bannedLoading, setBannedLoading] = useState(false);
   const [unBannedLoading, setUnBannedLoading] = useState(false);
+  const [dis, setDis] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -27,8 +28,10 @@ const AccRejBan = ({
       setBannedLoading(true);
     } else if (type === "accept") {
       setAcceptLoading(true);
+      setDis(true);
     } else if (type === "reject") {
       setRejectLoading(true);
+      setDis(true);
     } else if (type === "unblock") {
       setUnBannedLoading(true);
     }
@@ -37,6 +40,10 @@ const AccRejBan = ({
       applicantId: userId,
       type,
     });
+
+    if(!success){
+      setDis(false);
+    }
 
     toast({
       title: success
@@ -67,7 +74,7 @@ const AccRejBan = ({
       {isBanned ? (
         <Button
           disabled={
-            bannedLoading || acceptLoading || rejectLoading || unBannedLoading
+            bannedLoading || acceptLoading || rejectLoading || unBannedLoading || dis
           }
           onClick={() => handleAction("unblock")}
           variant="success"
@@ -77,7 +84,7 @@ const AccRejBan = ({
       ) : (
         <Button
           disabled={
-            bannedLoading || acceptLoading || rejectLoading || unBannedLoading
+            bannedLoading || acceptLoading || rejectLoading || unBannedLoading || dis
           }
           onClick={() => handleAction("block")}
           variant="destructive"
@@ -88,7 +95,7 @@ const AccRejBan = ({
 
       <Button
         disabled={
-          bannedLoading || acceptLoading || rejectLoading || unBannedLoading
+          bannedLoading || acceptLoading || rejectLoading || unBannedLoading || dis
         }
         onClick={() => handleAction("reject")}
         variant="secondary"
@@ -98,7 +105,7 @@ const AccRejBan = ({
       </Button>
       <Button
         disabled={
-          bannedLoading || acceptLoading || rejectLoading || unBannedLoading
+          bannedLoading || acceptLoading || rejectLoading || unBannedLoading || dis
         }
         onClick={() => handleAction("accept")}
       >

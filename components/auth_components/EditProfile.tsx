@@ -119,8 +119,7 @@ const EditProfile = ({
         <DialogHeader>
           <DialogTitle>Update profile</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. You can change your namea and
-            photo
+            Make changes to your profile here. You can change your name and profile photo.
           </DialogDescription>
         </DialogHeader>
         <div>
