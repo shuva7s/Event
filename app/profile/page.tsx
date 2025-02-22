@@ -6,14 +6,6 @@ import { LaptopMinimal, Smartphone, Monitor } from "lucide-react";
 import { headers } from "next/headers";
 import Image from "next/image";
 import { UAParser } from "ua-parser-js";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import SignOutButton from "@/components/auth_components/SignOutButton";
 import EditProfile from "@/components/auth_components/EditProfile";
@@ -72,110 +64,106 @@ async function Renderer() {
     });
 
   return (
-    <Card className="w-full max-w-3xl shadow-xl shadow-accent dark:shadow-none md:p-2">
-      <CardHeader className="flex-row items-center flex-wrap gap-4 relative">
+    <section className="w-full max-w-3xl flex flex-col gap-5">
+      <div className="flex items-center gap-3 relative shadow-lg shadow-border dark:shadow-none dark:bg-accent border p-4 rounded-2xl flex-wrap">
         <Dp
           className="w-[3.5rem] h-[3.5rem]"
           src={user.image}
           name={user.name}
           expandable={true}
         />
-        <div>
-          <CardTitle>{user.name}</CardTitle>
-          <CardDescription>{user.email}</CardDescription>
+        <div className="overflow-x-auto">
+          <h1 className="font-semibold p_md md:h_sm">{user.name}</h1>
+          <p className="text-muted-foreground text-sm">{user.email}</p>
         </div>
 
         <EditProfile
-          className="absolute right-6 z-10 text-muted-foreground"
+          className="absolute right-4 top-4 z-10 text-muted-foreground"
           image={user.image || "https://github.com/shadcn.png"}
           name={user.name}
         />
-      </CardHeader>
-      <CardContent className="flex flex-col gap-5">
-        <div>
-          <h2 className="font-semibold mb-4">Active sessions</h2>
-          <div className="grid grid-cols-1 gap-4">
-            {parsedSessions.map((s) => (
-              <div
-                key={s.id}
-                className="flex items-center gap-3 bg-accent dark:bg-accent/60 p-3 rounded-xl"
-              >
-                <div className="h-16 aspect-square rounded-lg bg-background flex items-center justify-center">
-                  {s.deviceType === "mobile" ? (
-                    <Smartphone className="w-7 h-7" />
-                  ) : s.deviceType === "desktop" ? (
-                    <LaptopMinimal className="w-7 h-7" />
-                  ) : (
-                    <Monitor className="w-7 h-7" />
-                  )}
-                </div>
+      </div>
 
-                <div className="flex-1 flex flex-row flex-wrap justify-between items-center relative">
-                  <p className="text-lg">
-                    {s.os}, {s.browser}
-                  </p>
-
-                  {s.isCurrent ? (
-                    <Badge className="h-8 absolute right-0" variant="success">
-                      Current
-                    </Badge>
-                  ) : (
-                    <RevokeSession token={s.token} />
-                  )}
-                </div>
+      <div>
+        <h2 className="font-semibold mb-4 ml-2">Active sessions</h2>
+        <div className="grid grid-cols-1 gap-4">
+          {parsedSessions.map((s) => (
+            <div
+              key={s.id}
+              className="flex items-center gap-3 bg-accent dark:bg-accent/60 p-3 rounded-xl"
+            >
+              <div className="h-16 aspect-square rounded-lg bg-background flex items-center justify-center">
+                {s.deviceType === "mobile" ? (
+                  <Smartphone className="w-7 h-7" />
+                ) : s.deviceType === "desktop" ? (
+                  <LaptopMinimal className="w-7 h-7" />
+                ) : (
+                  <Monitor className="w-7 h-7" />
+                )}
               </div>
-            ))}
-          </div>
-          {activeSessions.length > 1 && (
-            <div className="w-full mt-5 flex justify-end">
-              <RevokeSessions />
+
+              <div className="flex-1 flex flex-row flex-wrap justify-between items-center relative">
+                <p className="text-lg">
+                  {s.os}, {s.browser}
+                </p>
+
+                {s.isCurrent ? (
+                  <Badge className="h-8 absolute right-0" variant="success">
+                    Current
+                  </Badge>
+                ) : (
+                  <RevokeSession token={s.token} />
+                )}
+              </div>
             </div>
-          )}
+          ))}
         </div>
-
-        <div>
-          <h2 className="font-semibold mb-4">Accounts</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {accounts.map((a) => (
-              <div
-                key={a.id}
-                className="flex items-center gap-3 bg-accent dark:bg-accent/60 p-3 rounded-xl"
-              >
-                <div className="h-16 aspect-square rounded-lg bg-background flex items-center justify-center">
-                  <Image
-                    src={
-                      a.provider === "google" ? "/google.svg" : "/github.svg"
-                    }
-                    alt={a.provider}
-                    className={a.provider === "github" ? "dark:invert" : ""}
-                    width={27}
-                    height={27}
-                  />
-                </div>
-                <div className="flex-1 flex flex-row flex-wrap justify-between items-center">
-                  <p className="text-lg">
-                    {a.provider === "google" ? "Google" : "Github"}
-                  </p>
-                  {accounts.length > 1 && (
-                    <UnlinkAccount provider={a.provider} />
-                  )}
-                </div>
-              </div>
-            ))}
+        {activeSessions.length > 1 && (
+          <div className="w-full mt-5 flex justify-end">
+            <RevokeSessions />
           </div>
+        )}
+      </div>
+
+      <div>
+        <h2 className="font-semibold mb-4 ml-2">Accounts</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {accounts.map((a) => (
+            <div
+              key={a.id}
+              className="flex items-center gap-3 bg-accent dark:bg-accent/60 p-3 rounded-xl"
+            >
+              <div className="h-16 aspect-square rounded-lg bg-background flex items-center justify-center">
+                <Image
+                  src={a.provider === "google" ? "/google.svg" : "/github.svg"}
+                  alt={a.provider}
+                  className={a.provider === "github" ? "dark:invert" : ""}
+                  width={27}
+                  height={27}
+                />
+              </div>
+              <div className="flex-1 flex flex-row flex-wrap justify-between items-center">
+                <p className="text-lg">
+                  {a.provider === "google" ? "Google" : "Github"}
+                </p>
+                {accounts.length > 1 && <UnlinkAccount provider={a.provider} />}
+              </div>
+            </div>
+          ))}
         </div>
-      </CardContent>
-      <CardFooter className="flex flex-row flex-wrap items-center justify-between">
+      </div>
+
+      <div className="flex flex-row flex-wrap items-center justify-between">
         <p className="text-muted-foreground">Wanna sign out?</p>
         <SignOutButton afterSignOutUrl="/" />
-      </CardFooter>
-    </Card>
+      </div>
+    </section>
   );
 }
 
 const profilePage = () => {
   return (
-    <main className="w-full wrapper min-h-screen py-5 fl_center flex-col">
+    <main className="w-full wrapper py-6 flex justify-center">
       <Suspense fallback={<ProfileLoader />}>
         <Renderer />
       </Suspense>
