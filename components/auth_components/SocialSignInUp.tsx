@@ -16,13 +16,7 @@ import {
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 
-const SocialSignInUp = ({
-  login = true,
-  isDev = false,
-}: {
-  login?: boolean;
-  isDev?: boolean;
-}) => {
+const SocialSignInUp = ({ login = true }: { login?: boolean }) => {
   const [reqForSignIn, setReqForSignIn] = useState(false);
   const { toast } = useToast();
 
@@ -67,42 +61,38 @@ const SocialSignInUp = ({
       </CardHeader>
       <CardContent className="pb-5">
         <div className="flex flex-col gap-3">
-          {!isDev && (
-            <Button
-              className="w-full bg-accent-foreground/5 dark:bg-accent/50 dark:hover:bg-accent"
-              variant="ghost"
-              disabled={reqForSignIn}
-              onClick={() => handleSocialSignInUp("google")}
-            >
-              <Image
-                src="/google.svg"
-                alt="google"
-                width={20}
-                height={20}
-                priority={true}
-              />
-              Continue with Google
-            </Button>
-          )}
+          <Button
+            className="w-full bg-accent-foreground/5 dark:bg-accent/50 dark:hover:bg-accent"
+            variant="ghost"
+            disabled={reqForSignIn}
+            onClick={() => handleSocialSignInUp("google")}
+          >
+            <Image
+              src="/google.svg"
+              alt="google"
+              width={20}
+              height={20}
+              priority={true}
+            />
+            Continue with Google
+          </Button>
 
-          {isDev && (
-            <Button
-              variant="ghost"
-              className="w-full bg-accent-foreground/5 dark:bg-accent/50 dark:hover:bg-accent"
-              disabled={reqForSignIn}
-              onClick={() => handleSocialSignInUp("github")}
-            >
-              <Image
-                src="/github.svg"
-                className="dark:invert"
-                alt="github"
-                width={20}
-                height={20}
-                priority={true}
-              />
-              Continue with Github
-            </Button>
-          )}
+          <Button
+            variant="ghost"
+            className="w-full bg-accent-foreground/5 dark:bg-accent/50 dark:hover:bg-accent"
+            disabled={reqForSignIn}
+            onClick={() => handleSocialSignInUp("github")}
+          >
+            <Image
+              src="/github.svg"
+              className="dark:invert"
+              alt="github"
+              width={20}
+              height={20}
+              priority={true}
+            />
+            Continue with Github
+          </Button>
         </div>
       </CardContent>
       <CardFooter className="justify-center text-sm dark:text-muted-foreground pb-3">

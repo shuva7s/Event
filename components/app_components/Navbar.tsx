@@ -11,7 +11,7 @@ const Navbar = async () => {
   return (
     <header className="wrapper">
       <nav className="w-full py-5 flex justify-between items-center">
-        <p className="h_md">Evently</p>
+        <p className="h_sm lg:h_md">Evently</p>
         <div className="flex flex-row flex-wrap gap-3 items-center">
           <ModeToggle />
           {session && (
