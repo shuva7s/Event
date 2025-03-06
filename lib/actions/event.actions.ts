@@ -7,6 +7,7 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { redis } from "../upstash";
 import { UTApi } from "uploadthing/server";
 import { revalidatePath } from "next/cache";
+import { eventFormSchema } from "../form-schemas/event-form";
 
 const rateLimit = new Ratelimit({
   redis,
@@ -38,6 +39,28 @@ export async function createEvent({
   try {
     const ip = headers().get("x-forwarded-for") || "unknown";
     const { remaining, limit, success } = await rateLimit.limit(ip);
+
+    const result = eventFormSchema.safeParse({
+      title,
+      description,
+      location,
+      image,
+      isOnline,
+      isPublic,
+      startDateTime,
+      endDateTime,
+      url,
+    });
+
+    if (!result.success) {
+      return {
+        success: false,
+        error: {
+          title: "Error",
+          message: result.error.message,
+        },
+      };
+    }
     console.log("success", success);
     console.log("remaining", remaining);
     console.log("limit", limit);
@@ -71,15 +94,15 @@ export async function createEvent({
     INSERT INTO event (host_id, title, description, location, image, online, public, start_date_time, end_date_time, url, created_at, updated_at)
     VALUES (
       ${userId}, 
-      ${title}, 
-      ${description}, 
-      ${location}, 
-      ${image || null}, 
-      ${isOnline}, 
-      ${isPublic},
-      ${startDateTime}, 
-      ${endDateTime},
-      ${url},
+      ${result.data.title}, 
+      ${result.data.description}, 
+      ${result.data.location}, 
+      ${result.data.image || null}, 
+      ${result.data.isOnline}, 
+      ${result.data.isPublic},
+      ${result.data.startDateTime}, 
+      ${result.data.endDateTime},
+      ${result.data.url || null},
       NOW(), 
       NOW()
     )
@@ -157,6 +180,28 @@ export async function updateEvent({
       };
     }
 
+    const result = eventFormSchema.safeParse({
+      title,
+      description,
+      location,
+      image,
+      isOnline,
+      isPublic,
+      startDateTime,
+      endDateTime,
+      url,
+    });
+
+    if (!result.success) {
+      return {
+        success: false,
+        error: {
+          title: "Error",
+          message: result.error.message,
+        },
+      };
+    }
+
     const userId = session.user.id;
 
     // Connect to Neon database
@@ -187,15 +232,15 @@ export async function updateEvent({
     const updatedEvent = await sql`
         UPDATE event
         SET 
-          title = ${title},
-          description = ${description},
-          location = ${location},
-          image = ${image || null},
+          title = ${result.data.title},
+          description = ${result.data.description},
+          location = ${result.data.location},
+          image = ${result.data.image || null},
           online = ${isOnline},
           public = ${isPublic},
-          start_date_time = ${startDateTime},
-          end_date_time = ${endDateTime},
-          url = ${url},
+          start_date_time = ${result.data.startDateTime},
+          end_date_time = ${result.data.endDateTime},
+          url = ${result.data.url || null},
           updated_at = NOW()
         WHERE id = ${eventId} AND host_id = ${userId}
         RETURNING *;
