@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 
 const Footer = () => {
   return (
-    <footer className="wrapper bg-accent dark:bg-accent/50 pt-4 pb-10 rounded-t-2xl">
+    <footer className="wrapper bg-accent dark:bg-accent/50 pt-4 pb-10 rounded-t-2xl mt-5">
       <Link
         className="flex items-center gap-2 pt-4 pb-2 flex-wrap"
         target="_blank"
